@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="utf-8">
 <title>Donut AR</title>
 
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
 <style>
 body{
-margin:0;
-overflow:hidden;
+  margin:0;
+  overflow:hidden;
 }
 </style>
+
 </head>
 
 <body>
@@ -25,33 +26,119 @@ renderer="colorManagement:true, physicallyCorrectLights"
 vr-mode-ui="enabled:false"
 device-orientation-permission-ui="enabled:false">
 
-<a-assets>
+  <a-assets>
 
-<a-asset-item
-id="donut"
-src="donut.glb">
-</a-asset-item>
+    <a-asset-item
+      id="donut"
+      src="donut.glb">
+    </a-asset-item>
 
-</a-assets>
+  </a-assets>
 
-<a-camera
-position="0 0 0"
-look-controls="enabled:false">
-</a-camera>
+  <a-camera
+    position="0 0 0"
+    look-controls="enabled:false">
+  </a-camera>
 
-<a-entity mindar-image-target="targetIndex: 0">
+  <a-entity mindar-image-target="targetIndex: 0">
 
-<a-gltf-model
-src="#donut"
-position="0 0.1 0"
-rotation="0 0 0"
-scale="0.03 0.03 0.03"
-animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
-</a-gltf-model>
+    <a-entity
+      id="modelWrapper"
+      scale="0.03 0.03 0.03">
 
-</a-entity>
+      <a-gltf-model
+        src="#donut"
+        position="0 0.1 0"
+        rotation="0 0 0"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 8000">
+      </a-gltf-model>
+
+    </a-entity>
+
+  </a-entity>
 
 </a-scene>
+
+<script>
+
+window.addEventListener("load", () => {
+
+  const wrapper = document.querySelector("#modelWrapper");
+
+  let scale = 0.03;
+  let startDistance = 0;
+  let startX = 0;
+  let rotationY = 0;
+
+  function getDistance(t1, t2) {
+    const dx = t1.clientX - t2.clientX;
+    const dy = t1.clientY - t2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  document.addEventListener("touchstart", (e) => {
+
+    if (e.touches.length === 1) {
+      startX = e.touches[0].clientX;
+    }
+
+    if (e.touches.length === 2) {
+      startDistance = getDistance(
+        e.touches[0],
+        e.touches[1]
+      );
+    }
+
+  });
+
+  document.addEventListener("touchmove", (e) => {
+
+    // Xoay bằng 1 ngón
+    if (e.touches.length === 1) {
+
+      const currentX = e.touches[0].clientX;
+
+      rotationY += (currentX - startX) * 0.5;
+
+      wrapper.setAttribute(
+        "rotation",
+        `0 ${rotationY} 0`
+      );
+
+      startX = currentX;
+    }
+
+    // Zoom bằng 2 ngón
+    if (e.touches.length === 2) {
+
+      const newDistance = getDistance(
+        e.touches[0],
+        e.touches[1]
+      );
+
+      const delta =
+        (newDistance - startDistance) * 0.0005;
+
+      scale += delta;
+
+      scale = Math.max(
+        0.005,
+        Math.min(0.15, scale)
+      );
+
+      wrapper.setAttribute(
+        "scale",
+        `${scale} ${scale} ${scale}`
+      );
+
+      startDistance = newDistance;
+    }
+
+  });
+
+});
+
+</script>
 
 </body>
 </html>
