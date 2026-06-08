@@ -1,23 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Donut AR</title>
+<meta charset="utf-8">
+<title>Donut AR</title>
 
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+<style>
+body{
+margin:0;
+overflow:hidden;
+}
+</style>
 </head>
 
-<body style="margin:0;">
+<body>
 
-<model-viewer
-  src="donut.glb"
-  ar
-  ar-modes="scene-viewer webxr quick-look"
-  camera-controls
-  auto-rotate
-  shadow-intensity="1"
-  style="width:100%; height:100vh;">
-</model-viewer>
+<a-scene
+mindar-image="imageTargetSrc: targets.mind;"
+color-space="sRGB"
+renderer="colorManagement:true, physicallyCorrectLights"
+vr-mode-ui="enabled:false"
+device-orientation-permission-ui="enabled:false">
+
+<a-assets>
+
+<a-asset-item
+id="donut"
+src="donut.glb">
+</a-asset-item>
+
+</a-assets>
+
+<a-camera
+position="0 0 0"
+look-controls="enabled:false">
+</a-camera>
+
+<a-entity mindar-image-target="targetIndex: 0">
+
+<a-gltf-model
+src="#donut"
+position="0 0 0"
+rotation="0 0 0"
+scale="0.3 0.3 0.3">
+</a-gltf-model>
+
+</a-entity>
+
+</a-scene>
 
 </body>
 </html>
