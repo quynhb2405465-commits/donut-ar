@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Donut Table AR</title>
 
 <script type="module"
@@ -10,14 +12,30 @@ src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.j
 
 <style>
 
-body{
+html,body{
 margin:0;
-background:black;
+width:100%;
+height:100%;
+overflow:hidden;
+background:#000;
 }
 
 model-viewer{
-width:100vw;
-height:100vh;
+width:100%;
+height:100%;
+}
+
+#guide{
+position:fixed;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+background:rgba(0,0,0,.6);
+color:white;
+padding:10px 16px;
+border-radius:12px;
+font-family:Arial;
+z-index:999;
 }
 
 </style>
@@ -26,7 +44,12 @@ height:100vh;
 
 <body>
 
+<div id="guide">
+🍩 Bấm AR → quét mặt bàn → chạm để đặt donut
+</div>
+
 <model-viewer
+
 src="donut.glb"
 
 ar
@@ -41,7 +64,9 @@ auto-rotate
 
 shadow-intensity="1"
 
-scale="0.1 0.1 0.1">
+scale="0.1 0.1 0.1"
+
+exposure="1.2">
 
 </model-viewer>
 
