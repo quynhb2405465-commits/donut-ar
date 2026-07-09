@@ -1,49 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
-
-<script type="module"
-src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js">
-</script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR Menu — Bánh Ngọt</title>
 <style>
-
-html,body{
-margin:0;
-width:100%;
-height:100%;
-}
-
-model-viewer{
-width:100%;
-height:100%;
-}
-
+  body{ font-family: Georgia, serif; background:#FBF3E7; color:#3B2417; margin:0; padding:32px 20px; }
+  h1{ text-align:center; font-weight:400; font-size:22px; }
+  p.sub{ text-align:center; font-family:Helvetica,Arial,sans-serif; font-size:12px; color:#6B4A36; margin-top:-8px;}
+  ul{ list-style:none; padding:0; max-width:420px; margin:24px auto; }
+  li{ margin-bottom:10px; }
+  a{
+    display:block; background:#fff; border:1px solid #E4D3BE; border-radius:10px;
+    padding:14px 16px; text-decoration:none; color:#3B2417; font-family:Helvetica,Arial,sans-serif;
+    font-size:14px;
+  }
+  a:hover{ background:#F4E9D8; }
 </style>
 </head>
-
 <body>
-
-<model-viewer
-
-src="donut.glb"
-
-ar
-
-ar-modes="webxr scene-viewer quick-look"
-
-camera-controls
-
-auto-rotate
-
-shadow-intensity="1"
-
->
-
-</model-viewer>
-
+<h1>AR Menu — Bánh Ngọt</h1>
+<p class="sub">Trang này chỉ để bạn tự kiểm tra — khách sẽ vào thẳng từng bánh qua QR riêng</p>
+<ul>
+  <li><a href="pages/raspberry_cake.html">Bánh Mâm Xôi — Raspberry Cake</a></li>
+  <li><a href="pages/polish_donut.html">Bánh Donut Ba Lan — Polish Donut</a></li>
+  <li><a href="pages/pistachio_mousse_cake.html">Mousse Hạt Dẻ Cười — Pistachio Mousse Cake</a></li>
+  <li><a href="pages/pistachio_cheesecake.html">Cheesecake Hạt Dẻ Cười — Pistachio Cheesecake</a></li>
+  <li><a href="pages/cinnamon_pastry.html">Bánh Cuộn Quế — Cinnamon Pastry</a></li>
+  <li><a href="pages/chocolate_mousse_cake.html">Mousse Chocolate — Chocolate Mousse Cake</a></li>
+  <li><a href="pages/chocolate_donut.html">Donut Chocolate — Chocolate Donut</a></li>
+  <li><a href="pages/chocolate_cake.html">Bánh Kem Chocolate — Chocolate Cake</a></li>
+  <li><a href="pages/donut.html">Bánh Donut — Donut</a></li>
+</ul>
 </body>
 </html>
