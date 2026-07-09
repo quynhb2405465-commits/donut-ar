@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bánh Donut — AR</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+<style>
+  html,body{ margin:0; height:100%; background:#1a120b; overflow:hidden; }
+  model-viewer{ width:100%; height:100%; --poster-color: transparent; }
+
+  #title-bar{
+    position:fixed; top:0; left:0; right:0;
+    padding:14px 16px calc(14px + env(safe-area-inset-top));
+    background:linear-gradient(180deg, rgba(0,0,0,.55), transparent);
+    color:#fff; font-family:Georgia,serif; font-size:17px;
+    z-index:5; pointer-events:none;
+  }
+  #title-bar span{ display:block; font-family:Helvetica,Arial,sans-serif; font-size:11px; opacity:.8; letter-spacing:1px; }
+
+.hotspot{
+    background: rgba(20,12,8,.85);
+    color: #fff;
+
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,.5);
+
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    transition: transform .2s ease;
+}
+
+.hotspot:hover{
+    transform: scale(1.1);
+}
+
+  #ingredient-panel{
+    position:fixed; left:16px; right:16px;
+    bottom:calc(20px + env(safe-area-inset-bottom));
+    background:rgba(20,12,8,.9);
+    color:#fff;
+    border-radius:14px;
+    padding:14px 16px;
+    font-family:Helvetica,Arial,sans-serif;
+    font-size:13px;
+    line-height:1.5;
+    display:none;
+    z-index:6;
+    backdrop-filter: blur(4px);
+  }
+  #ingredient-panel b{ color:#E8A883; }
+  #ingredient-panel .close{ float:right; opacity:.6; margin-left:10px; cursor:pointer; }
+
+  #ar-btn{ display:none; }
+
+  #fallback-msg{
+    position:fixed; bottom:20px; left:16px; right:16px;
+    background:rgba(20,12,8,.85); color:#fff; padding:12px 14px; border-radius:12px;
+    font-family:Helvetica,Arial,sans-serif; font-size:12px; text-align:center;
+    display:none; z-index:6;
+  }
+
+  #tap-overlay{
+    position:fixed; inset:0; z-index:8;
+    background:rgba(0,0,0,.35);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .tap-box{
+    background:rgba(20,12,8,.9); color:#fff;
+    padding:22px 26px; border-radius:16px;
+    font-family:Helvetica,Arial,sans-serif; font-size:14px; text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.4);
+  }
+  .tap-icon{ font-size:28px; margin-bottom:8px; }
+</style>
+</head>
+<body>
+
+<div id="tap-overlay">
+  <div class="tap-box">
+    <div class="tap-icon">＋</div>
+    Chạm để xem trong không gian thực
+  </div>
+</div>
+
+
+<div id="title-bar">
+  Bánh Donut
+  <span>Donut</span>
+</div>
+
+<model-viewer id="mv"
+  src="../models/donut.glb"
+  ar
+  ar-modes="webxr scene-viewer"
+  camera-controls
+  touch-action="pan-y"
+  tone-mapping="neutral"
+  shadow-intensity="1"
+  xr-environment>
+  <button id="ar-btn" slot="ar-button">Xem trong không gian thực</button>
+  <button class="hotspot" slot="hotspot-0" data-position="0 0.2 0.35" data-normal="0 1 0" onclick="showIngredient('<b>Lớp phủ:</b> đường / glaze phủ ngoài bánh.')">+</button>
+  <button class="hotspot" slot="hotspot-1" data-position="0 0 0" data-normal="0 1 0" onclick="showIngredient('<b>Nhân bánh:</b> mô tả nhân bên trong (sửa lại theo công thức thật).')">+</button>
+</model-viewer>
+
+<div id="ingredient-panel">
+  <span class="close" onclick="document.getElementById('ingredient-panel').style.display='none'">✕</span>
+  <span id="ingredient-text"></span>
+</div>
+
+<div id="fallback-msg">Máy này chưa hỗ trợ AR trong trình duyệt — bạn vẫn có thể xoay bánh bằng tay ở trên.</div>
+
+<script>
+  const mv = document.getElementById('mv');
+  const panel = document.getElementById('ingredient-panel');
+  const text = document.getElementById('ingredient-text');
+
+  function showIngredient(html){
+    text.innerHTML = html;
+    panel.style.display = 'block';
+  }
+  window.showIngredient = showIngredient;
+
+  // Chờ đúng 1 chạm tay thật của khách rồi mới bật AR
+  // (bắt buộc phải vậy vì trình duyệt chặn tự động xin quyền camera nếu không có thao tác tay thật)
+  const tapOverlay = document.getElementById('tap-overlay');
+  tapOverlay.addEventListener('click', () => {
+    tapOverlay.style.display = 'none';
+    mv.activateAR().catch(() => {
+      document.getElementById('fallback-msg').style.display = 'block';
+    });
+  }, { once: true });
+
+  setTimeout(() => {
+    if (!mv.canActivateAR) {
+      document.getElementById('fallback-msg').style.display = 'block';
+    }
+  }, 4000);
+</script>
+
+</body>
+</html>
